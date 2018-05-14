@@ -34,16 +34,16 @@ get '/wallet/new' => sub {
 post '/generate/transaction' => sub {
   my $transaction_form = (my $c = shift)->transaction_form;
   $transaction_form->process(params => +{
-        sender_address => $c->param('sender_address'),
-        sender_private_key => $c->param('sender_private_key'),
-        recipient_address => $c->param('recipient_address'),
-        amount => $c->param('amount'),
-    });
+    sender_address => $c->param('sender_address'),
+    sender_private_key => $c->param('sender_private_key'),
+    recipient_address => $c->param('recipient_address'),
+    amount => $c->param('amount'),
+  });
   if($transaction_form->validated) {
     my $transaction = $c->transaction($transaction_form->fif);
     $c->render(json => {
       signature => $transaction->sign_transaction,
-      transaction_body => $transaction->transaction_body,
+      transaction => $transaction->transaction_body,
     });
   } else {
     # TODO: return errors
